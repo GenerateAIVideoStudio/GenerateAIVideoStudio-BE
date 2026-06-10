@@ -13,6 +13,6 @@ public class StoryboardConfiguration : IEntityTypeConfiguration<Storyboard>
         builder.Property(x => x.Status).HasMaxLength(50).IsRequired();
         builder.Property(x => x.JobId).HasMaxLength(255);
         builder.HasOne(x => x.Scene).WithOne(x => x.Storyboard).HasForeignKey<Storyboard>(x => x.SceneId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.ImageAsset).WithMany().HasForeignKey(x => x.ImageAssetId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.ImageAsset).WithMany().HasForeignKey(x => x.ImageAssetId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

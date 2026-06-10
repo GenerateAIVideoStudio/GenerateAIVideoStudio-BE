@@ -10,7 +10,7 @@ public class CharacterBibleConfiguration : IEntityTypeConfiguration<CharacterBib
     {
         builder.ToTable("character_bibles");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.BibleJson).HasColumnType("jsonb").IsRequired();
+        builder.Property(x => x.BibleJson).HasColumnType("nvarchar(max)").IsRequired();
         builder.HasOne(x => x.Character).WithOne(x => x.Bible).HasForeignKey<CharacterBible>(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -14,7 +14,7 @@ public class SceneConfiguration : IEntityTypeConfiguration<Scene>
         builder.Property(x => x.Mood).HasMaxLength(100);
         builder.Property(x => x.Status).HasMaxLength(50).IsRequired();
         builder.HasOne(x => x.Story).WithMany(x => x.Scenes).HasForeignKey(x => x.StoryId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.Location).WithMany(x => x.Scenes).HasForeignKey(x => x.LocationId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.Location).WithMany(x => x.Scenes).HasForeignKey(x => x.LocationId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasIndex(x => new { x.StoryId, x.SceneNumber }).IsUnique();
     }
 }

@@ -15,7 +15,7 @@ public class AssetConfiguration : IEntityTypeConfiguration<Asset>
         builder.Property(x => x.ObjectKey).HasMaxLength(500).IsRequired();
         builder.HasIndex(x => x.ObjectKey).IsUnique();
         builder.Property(x => x.MimeType).HasMaxLength(100);
-        builder.Property(x => x.Metadata).HasColumnType("jsonb");
+        builder.Property(x => x.Metadata).HasColumnType("nvarchar(max)");
         builder.HasOne(x => x.Project).WithMany(x => x.Assets).HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Cascade);
         builder.HasIndex(x => x.ProjectId);
         builder.HasIndex(x => x.AssetType);

@@ -12,9 +12,9 @@ public class CharacterMemoryConfiguration : IEntityTypeConfiguration<CharacterMe
         builder.HasKey(x => x.Id);
         builder.Property(x => x.MemoryScope).HasMaxLength(50).IsRequired();
         builder.Property(x => x.MemoryType).HasMaxLength(50);
-        builder.Property(x => x.MemoryJson).HasColumnType("jsonb").IsRequired();
+        builder.Property(x => x.MemoryJson).HasColumnType("nvarchar(max)").IsRequired();
         builder.HasOne(x => x.Character).WithMany(x => x.Memories).HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.RelatedCharacter).WithMany().HasForeignKey(x => x.RelatedCharacterId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.RelatedCharacter).WithMany().HasForeignKey(x => x.RelatedCharacterId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasIndex(x => x.CharacterId);
         builder.HasIndex(x => new { x.CharacterId, x.MemoryScope });
         builder.HasIndex(x => new { x.CharacterId, x.RelatedCharacterId });

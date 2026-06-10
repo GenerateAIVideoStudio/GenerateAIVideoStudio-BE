@@ -14,7 +14,7 @@ public class SceneVoiceConfiguration : IEntityTypeConfiguration<SceneVoice>
         builder.Property(x => x.JobId).HasMaxLength(255);
         builder.Property(x => x.DurationSec).HasColumnType("numeric(6,2)");
         builder.HasOne(x => x.Scene).WithMany(x => x.Voices).HasForeignKey(x => x.SceneId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.Character).WithMany().HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.SetNull);
-        builder.HasOne(x => x.AudioAsset).WithMany().HasForeignKey(x => x.AudioAssetId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.Character).WithMany().HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.ClientSetNull);
+        builder.HasOne(x => x.AudioAsset).WithMany().HasForeignKey(x => x.AudioAssetId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

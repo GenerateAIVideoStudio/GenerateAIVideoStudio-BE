@@ -1,32 +1,18 @@
 version: '3.9'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: aivideo_postgres
-    environment:
-      POSTGRES_DB: aivideo
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
+  # 2. Redis Cache
   redis:
     image: redis:7-alpine
     container_name: aivideo_redis
     ports:
-      - "6379:6379"
+      - "6380:6379" # Đổi port ngoài thành 6380 để không đụng với dodosystem-be
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
 
+  # 3. RabbitMQ Message Broker
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
     container_name: aivideo_rabbitmq
@@ -34,16 +20,12 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"    # AMQP
-      - "15672:15672"  # Management UI
+      - "5673:5672"    # AMQP: Đổi thành 5673
+      - "15673:15672"  # Management UI: Đổi thành 15673
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
+  # 4. MinIO Object Storage
   minio:
     image: minio/minio:latest
     container_name: aivideo_minio
@@ -56,14 +38,25 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+
+  # 5. Backend API Project
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aivideo_api
+    depends_on:
+      - redis
+      - rabbitmq
+      - minio
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # API ở trong Docker sẽ gọi SQL Server ở máy Host thông qua host.docker.internal
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal;Database=GenerateAIVideoStudioDb;User Id=sa;Password=12345;TrustServerCertificate=true;MultipleActiveResultSets=true
 
 volumes:
-  postgres_data:
   redis_data:
   rabbitmq_data:
   minio_data:

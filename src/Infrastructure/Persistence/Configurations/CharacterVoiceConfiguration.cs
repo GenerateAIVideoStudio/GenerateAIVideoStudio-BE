@@ -15,6 +15,6 @@ public class CharacterVoiceConfiguration : IEntityTypeConfiguration<CharacterVoi
         builder.Property(x => x.VoiceName).HasMaxLength(255);
         builder.Property(x => x.Language).HasMaxLength(10).IsRequired();
         builder.HasOne(x => x.Character).WithOne(x => x.Voice).HasForeignKey<CharacterVoice>(x => x.CharacterId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.SampleAudioAsset).WithMany().HasForeignKey(x => x.SampleAudioAssetId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.SampleAudioAsset).WithMany().HasForeignKey(x => x.SampleAudioAssetId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

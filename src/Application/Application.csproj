@@ -3,7 +3,7 @@
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Characters\" />
-    <Folder Include="Common\" />
+    <Folder Include="Common\Interfaces\IRepositories\" />
     <Folder Include="Composition\" />
     <Folder Include="Locations\" />
     <Folder Include="Memories\" />

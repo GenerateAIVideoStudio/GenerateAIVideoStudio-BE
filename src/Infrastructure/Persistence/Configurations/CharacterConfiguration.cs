@@ -14,7 +14,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.Gender).HasMaxLength(50);
         builder.Property(x => x.Status).HasMaxLength(50).IsRequired();
         builder.HasOne(x => x.Project).WithMany(x => x.Characters).HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.FaceAsset).WithMany().HasForeignKey(x => x.FaceAssetId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasOne(x => x.FaceAsset).WithMany().HasForeignKey(x => x.FaceAssetId).OnDelete(DeleteBehavior.ClientSetNull);
         builder.HasIndex(x => x.ProjectId);
     }
 }

@@ -12,7 +12,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                    .UseSnakeCaseNamingConvention());
 
         return services;
