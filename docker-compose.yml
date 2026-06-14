@@ -1,62 +1,15 @@
-version: '3.9'
-
+version: '3.8'
 services:
-
-  # 2. Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: aivideo_redis
-    ports:
-      - "6380:6379" # Đổi port ngoài thành 6380 để không đụng với dodosystem-be
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
-
-  # 3. RabbitMQ Message Broker
-  rabbitmq:
-    image: rabbitmq:3.13-management-alpine
-    container_name: aivideo_rabbitmq
+  postgres:
+    image: postgres:16
+    container_name: ugcads_postgres
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      POSTGRES_DB: ugcads
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "5673:5672"    # AMQP: Đổi thành 5673
-      - "15673:15672"  # Management UI: Đổi thành 15673
+      - "5433:5432"
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-
-  # 4. MinIO Object Storage
-  minio:
-    image: minio/minio:latest
-    container_name: aivideo_minio
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    ports:
-      - "9000:9000"   # API
-      - "9001:9001"   # Console UI
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-
-  # 5. Backend API Project
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: aivideo_api
-    depends_on:
-      - redis
-      - rabbitmq
-      - minio
-    ports:
-      - "5000:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      # API ở trong Docker sẽ gọi SQL Server ở máy Host thông qua host.docker.internal
-      - ConnectionStrings__DefaultConnection=Server=host.docker.internal;Database=GenerateAIVideoStudioDb;User Id=sa;Password=12345;TrustServerCertificate=true;MultipleActiveResultSets=true
-
+      - postgres_data:/var/lib/postgresql/data
 volumes:
-  redis_data:
-  rabbitmq_data:
-  minio_data:
+  postgres_data:
