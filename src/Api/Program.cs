@@ -1,5 +1,7 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Api.Middleware;
@@ -27,6 +29,15 @@ builder.Services.AddCors(options =>
          .AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
+
+// Run migrations and seed data on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    await SeedData.SeedHookTemplatesAsync(db);
+    await SeedData.SeedModelImagesAsync(db);
+}
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionHandlingMiddleware>();

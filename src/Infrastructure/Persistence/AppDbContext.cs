@@ -1,12 +1,19 @@
 namespace Infrastructure.Persistence;
 
 using Domain.Common;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    public DbSet<VideoJob> VideoJobs => Set<VideoJob>();
+    public DbSet<JobVariation> JobVariations => Set<JobVariation>();
+    public DbSet<ApiCost> ApiCosts => Set<ApiCost>();
+    public DbSet<ModelImage> ModelImages => Set<ModelImage>();
+    public DbSet<HookTemplate> HookTemplates => Set<HookTemplate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
