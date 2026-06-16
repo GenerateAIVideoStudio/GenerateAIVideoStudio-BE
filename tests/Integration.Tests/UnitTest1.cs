@@ -1,4 +1,6 @@
-﻿namespace Integration.Tests;
+using Xunit;
+
+namespace Integration.Tests;
 
 public class UnitTest1
 {

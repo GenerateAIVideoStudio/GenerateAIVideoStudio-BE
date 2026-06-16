@@ -24,9 +24,9 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 
         var builder = new DbContextOptionsBuilder<AppDbContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection") 
-            ?? "Server=localhost;Database=GenerateAIVideoStudioDb;User Id=sa;Password=12345;TrustServerCertificate=true;MultipleActiveResultSets=true";
+            ?? "Host=localhost;Database=ugcads;Username=postgres;Password=12345;Port=5432";
 
-        builder.UseSqlServer(connectionString)
+        builder.UseNpgsql(connectionString)
                .UseSnakeCaseNamingConvention();
 
         return new AppDbContext(builder.Options);
