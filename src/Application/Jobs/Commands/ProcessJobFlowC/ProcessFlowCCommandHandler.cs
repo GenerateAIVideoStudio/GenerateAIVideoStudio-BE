@@ -131,7 +131,8 @@ public class ProcessFlowCCommandHandler : IRequestHandler<ProcessFlowCCommand>
                 ProductImageUrls: product.ImageUrls.Take(3).ToList(),
                 ScriptFullText: script.FullText,
                 OutputFormat: job.OutputFormat,
-                FlowType: Domain.Constants.FlowType.ImageVideo
+                FlowType: Domain.Constants.FlowType.ImageVideo,
+                AudioObjectKey: audioKey
             ), ct);
 
             variation.FinalUrl = finalKey;

@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
-using Infrastructure.Fakes;
+using Infrastructure.AI;
+using Infrastructure.Storage;
+using Infrastructure.Video;
 using Application.Common.Interfaces;
 
 namespace Infrastructure;
@@ -22,15 +24,19 @@ public static class DependencyInjection
         services.AddScoped<IVideoJobRepository, VideoJobRepository>();
         services.AddScoped<IModelImageRepository, ModelImageRepository>();
 
-        // Mock/Fake Services for Phase 2 API Verification
-        services.AddScoped<IProductScraperService, FakeProductScraperService>();
-        services.AddScoped<IProductCategoryDetector, FakeProductCategoryDetector>();
-        services.AddScoped<IScriptGeneratorService, FakeScriptGeneratorService>();
-        services.AddScoped<IVoiceSynthesisService, FakeVoiceSynthesisService>();
-        services.AddScoped<IAvatarVideoService, FakeAvatarVideoService>();
-        services.AddScoped<IKlingService, FakeKlingService>();
-        services.AddScoped<IVideoComposerService, FakeVideoComposerService>();
-        services.AddScoped<IStorageService, FakeStorageService>();
+        // AI & Scraper Services
+        services.AddScoped<IProductScraperService, ShopeeProductScraper>();
+        services.AddScoped<IProductCategoryDetector, OpenAiProductCategoryDetector>();
+        services.AddScoped<IScriptGeneratorService, OpenAiScriptGeneratorService>();
+        
+        // Http Clients for external APIs
+        services.AddHttpClient<IVoiceSynthesisService, ElevenLabsVoiceSynthesisService>();
+        services.AddHttpClient<IAvatarVideoService, HeyGenAvatarVideoService>();
+        services.AddHttpClient<IKlingService, KlingService>();
+
+        // Storage & Video Services
+        services.AddSingleton<IStorageService, CloudflareR2StorageService>();
+        services.AddScoped<IVideoComposerService, FfmpegVideoComposerService>();
 
         return services;
     }

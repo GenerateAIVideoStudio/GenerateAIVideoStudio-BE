@@ -128,7 +128,8 @@ public class ProcessFlowBCommandHandler : IRequestHandler<ProcessFlowBCommand>
                 ProductImageUrls: product.ImageUrls.Take(2).ToList(),
                 ScriptFullText: script.FullText,
                 OutputFormat: job.OutputFormat,
-                FlowType: Domain.Constants.FlowType.TryOn
+                FlowType: Domain.Constants.FlowType.TryOn,
+                AudioObjectKey: audioKey
             ), ct);
 
             variation.FinalUrl = finalKey;
