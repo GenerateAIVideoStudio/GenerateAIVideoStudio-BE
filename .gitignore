@@ -480,3 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
