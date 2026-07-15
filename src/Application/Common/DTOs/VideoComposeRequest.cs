@@ -9,5 +9,6 @@ public record VideoComposeRequest(
     List<string> ProductImageUrls,   // All flows (fallback/overlay)
     string ScriptFullText,
     string OutputFormat,
-    string FlowType
+    string FlowType,
+    string? AudioObjectKey = null
 );
